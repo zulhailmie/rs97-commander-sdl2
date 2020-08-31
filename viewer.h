@@ -6,11 +6,13 @@
 #include <vector>
 #include <SDL.h>
 #include <SDL_ttf.h>
-
+#include "def.h"
 #include "screen.h"
 #include "window.h"
 
+#ifndef VIEWER_LINE_HEIGHT
 #define VIEWER_LINE_HEIGHT   13
+#endif
 #define VIEWER_Y_LIST        18
 #define VIEWER_NB_LINES      ((screen.h - VIEWER_Y_LIST - 1) / VIEWER_LINE_HEIGHT + 1)
 #define VIEWER_MARGIN        1

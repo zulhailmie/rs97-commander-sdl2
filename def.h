@@ -46,16 +46,30 @@
 #endif
 
 // Panel
+#ifndef HEADER_H
 #define HEADER_H 17
-#define HEADER_PADDING_TOP 3
+#endif
 
+#ifndef HEADER_PADDING_TOP
+#define HEADER_PADDING_TOP 3
+#endif
+
+#ifndef FOOTER_H
 #define FOOTER_H 13
+#endif
+
+#ifndef FOOTER_PADDING_TOP
 #define FOOTER_PADDING_TOP 1
+#endif
+
 #define FOOTER_Y (screen.h - FOOTER_H)
 
 #define Y_LIST HEADER_H
 
+#ifndef LINE_HEIGHT
 #define LINE_HEIGHT 15
+#endif
+
 #define NB_VISIBLE_LINES ((screen.h - FOOTER_H - HEADER_H - 1) / LINE_HEIGHT + 1)
 #define NB_FULLY_VISIBLE_LINES ((screen.h - FOOTER_H - HEADER_H) / LINE_HEIGHT)
 
