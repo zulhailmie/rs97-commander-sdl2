@@ -182,12 +182,11 @@ std::string input_start_btn;
        }else if (button.find("button="+input_start_btn+" s") != std::string::npos) { 
            key_event.key.keysym.sym = MYKEY_TRANSFER;
 //           std::cout << "You pressed start! " << '\n';
-       } else if (button.find("hat=0 value=0") != std::string::npos) { 
-         //std::cout << "preventing a double input" << '\n';
-         } //else { 
+       } else { 
+           break; // Break out of loop to prevent undefined buttons from triggering a key_event
 //           std::cout << "I don't know what you pressed! " << '\n';
 //           std::cout << button << '\n';
-       // }
+       }
          
          if (button.find("hat=0 value=0") != std::string::npos) { 
          //std::cout << "preventing a double input" << '\n';
