@@ -48,10 +48,10 @@ std::string input_start_btn;
     
     //from: https://www.walletfox.com/course/parseconfigfile.php
     // std::ifstream is RAII, i.e. no need to call close
-    std::ifstream cFile ("/tmp/joypads/"+gamepad+".cfg");
+    std::ifstream cFile ("/opt/dingux/oshgamepad.cfg");
     if (cFile.is_open())
     {
-     std::cout << "Using: " << "/tmp/joypads/" << gamepad << ".cfg" << '\n';
+     std::cout << "Using: " << "/opt/dingux/oshgamepad.cfg" << '\n';
         std::string line;
         while(getline(cFile, line)){
             line.erase(std::remove_if(line.begin(), line.end(), isspace),
@@ -64,46 +64,46 @@ std::string input_start_btn;
             value.erase(std::remove(value.begin(),value.end(),'\"'),value.end());
           //  std::cout << name << " " << value << '\n';
           
-           if  (name.find("input_up_btn") != std::string::npos)
+           if  (name.find("input_player1_up_btn") != std::string::npos)
            input_up_btn = value;
                      
-           if  (name.find("input_down_btn") != std::string::npos)
+           if  (name.find("input_player1_down_btn") != std::string::npos)
            input_down_btn = value;
                      
-           if  (name.find("input_left_btn") != std::string::npos)
+           if  (name.find("input_player1_left_btn") != std::string::npos)
            input_left_btn = value;
                      
-           if  (name.find("input_right_btn") != std::string::npos)
+           if  (name.find("input_player1_right_btn") != std::string::npos)
            input_right_btn = value;
           
-           if  (name.find("input_a_btn") != std::string::npos)
-           input_a_btn = value;
-          
-           if  (name.find("input_b_btn") != std::string::npos)
+           if  (name.find("input_player1_a_btn") != std::string::npos)
            input_b_btn = value;
           
-           if  (name.find("input_x_btn") != std::string::npos) 
+           if  (name.find("input_player1_b_btn") != std::string::npos)
+           input_a_btn = value;
+          
+           if  (name.find("input_player1_x_btn") != std::string::npos) 
            input_x_btn = value;
           
-           if  (name.find("input_y_btn") != std::string::npos) 
+           if  (name.find("input_player1_y_btn") != std::string::npos) 
            input_y_btn = value;
           
-           if  (name.find("input_l_btn") != std::string::npos) 
+           if  (name.find("input_player1_l_btn") != std::string::npos) 
            input_l_btn = value;
           
-           if  (name.find("input_r_btn") != std::string::npos) 
+           if  (name.find("input_player1_r_btn") != std::string::npos) 
            input_r_btn = value;
           
-           if  (name.find("input_select_btn") != std::string::npos) 
+           if  (name.find("input_player1_select_btn") != std::string::npos) 
            input_select_btn = value;
           
-           if  (name.find("input_start_btn") != std::string::npos) 
+           if  (name.find("input_player1_start_btn") != std::string::npos) 
            input_start_btn = value;
         }
         
     }
     else {
-        printf("Name: %s\n", "Couldn't open /tmp/joypads/"+gamepad+".cfg config file for reading.");
+        printf("Name: %s\n", "/opt/dingux/oshgamepad.cfg config file for reading.");
     }
     
     m_retVal = 0;
