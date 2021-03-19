@@ -42,67 +42,65 @@ std::string input_l_btn;
 std::string input_r_btn;
 std::string input_select_btn;
 std::string input_start_btn;
-
-
- std::string gamepad = SDL_JoystickNameForIndex(0);
+std::string gamepad = SDL_JoystickNameForIndex(0);
     
     //from: https://www.walletfox.com/course/parseconfigfile.php
     // std::ifstream is RAII, i.e. no need to call close
     std::ifstream cFile ("/opt/dingux/oshgamepad.cfg");
     if (cFile.is_open())
     {
-     std::cout << "Using: " << "/opt/dingux/oshgamepad.cfg" << '\n';
+        std::cout << "Using: " << "/opt/dingux/oshgamepad.cfg" << '\n';
         std::string line;
-        while(getline(cFile, line)){
-            line.erase(std::remove_if(line.begin(), line.end(), isspace),
-                                 line.end());
+        while(getline(cFile, line))
+        {
+            line.erase(std::remove_if(line.begin(), line.end(), isspace), line.end());
             if(line[0] == '#' || line.empty())
                 continue;
             auto delimiterPos = line.find("=");
             auto name = line.substr(0, delimiterPos);
             auto value = line.substr(delimiterPos + 1);
             value.erase(std::remove(value.begin(),value.end(),'\"'),value.end());
-          //  std::cout << name << " " << value << '\n';
-          
-           if  (name.find("input_player1_up_btn") != std::string::npos)
-           input_up_btn = value;
-                     
-           if  (name.find("input_player1_down_btn") != std::string::npos)
-           input_down_btn = value;
-                     
-           if  (name.find("input_player1_left_btn") != std::string::npos)
-           input_left_btn = value;
-                     
-           if  (name.find("input_player1_right_btn") != std::string::npos)
-           input_right_btn = value;
-          
-           if  (name.find("input_player1_a_btn") != std::string::npos)
-           input_b_btn = value;
-          
-           if  (name.find("input_player1_b_btn") != std::string::npos)
-           input_a_btn = value;
-          
-           if  (name.find("input_player1_x_btn") != std::string::npos) 
-           input_x_btn = value;
-          
-           if  (name.find("input_player1_y_btn") != std::string::npos) 
-           input_y_btn = value;
-          
-           if  (name.find("input_player1_l_btn") != std::string::npos) 
-           input_l_btn = value;
-          
-           if  (name.find("input_player1_r_btn") != std::string::npos) 
-           input_r_btn = value;
-          
-           if  (name.find("input_player1_select_btn") != std::string::npos) 
-           input_select_btn = value;
-          
-           if  (name.find("input_player1_start_btn") != std::string::npos) 
-           input_start_btn = value;
+            //  std::cout << name << " " << value << '\n';
+            
+            if  (name.find("input_player1_up_btn") != std::string::npos)
+            input_up_btn = value;
+            
+            if  (name.find("input_player1_down_btn") != std::string::npos)
+            input_down_btn = value;
+            
+            if  (name.find("input_player1_left_btn") != std::string::npos)
+            input_left_btn = value;
+            
+            if  (name.find("input_player1_right_btn") != std::string::npos)
+            input_right_btn = value;
+            
+            if  (name.find("input_player1_a_btn") != std::string::npos)
+            input_b_btn = value;
+            
+            if  (name.find("input_player1_b_btn") != std::string::npos)
+            input_a_btn = value;
+            
+            if  (name.find("input_player1_x_btn") != std::string::npos) 
+            input_x_btn = value;
+            
+            if  (name.find("input_player1_y_btn") != std::string::npos) 
+            input_y_btn = value;
+            
+            if  (name.find("input_player1_l_btn") != std::string::npos) 
+            input_l_btn = value;
+            
+            if  (name.find("input_player1_r_btn") != std::string::npos) 
+            input_r_btn = value;
+            
+            if  (name.find("input_player1_select_btn") != std::string::npos) 
+            input_select_btn = value;
+            
+            if  (name.find("input_player1_start_btn") != std::string::npos) 
+            input_start_btn = value;
         }
-        
     }
-    else {
+    else
+    {
         printf("Name: %s\n", "/opt/dingux/oshgamepad.cfg config file for reading.");
     }
     
@@ -118,86 +116,138 @@ std::string input_start_btn;
         // Handle key press
         while (SDL_PollEvent(&l_event))
         {
-            if (l_event.type == SDL_KEYDOWN)
+            switch (l_event.type)
             {
-                l_render = this->keyPress(l_event);
-                if (m_retVal)
+                default:
+                {
+                    // Do nothing
+                }
+                break;
+                
+                case SDL_KEYDOWN:
+                {
+                    l_render = this->keyPress(l_event);
+                    if (m_retVal)
                     l_loop = false;
+                }
+                break;
+                    
+                case SDL_QUIT:
+                {
+                    return m_retVal;
+                }
+                break;
+                    
+                case SDL_JOYBUTTONDOWN:
+                case SDL_JOYHATMOTION:
+                {
+                    SDL_Event key_event;
+                    std::string button = sdlEventToString(l_event);
+                    
+                    if (button.find("hat=0 value=1") != std::string::npos)
+                    {
+                        key_event.key.keysym.sym = MYKEY_UP;
+                        // std::cout << "You pressed up! " << '\n';
+                    }
+                    else if (button.find("button="+input_up_btn+" s") != std::string::npos)
+                    {
+                        key_event.key.keysym.sym = MYKEY_UP;
+                        // std::cout << "You pressed up! " << '\n';
+                    }
+                    else if (button.find("hat=0 value=4") != std::string::npos)
+                    {
+                        key_event.key.keysym.sym = MYKEY_DOWN;
+                        // std::cout << "You pressed down! " << '\n';
+                    }
+                    else if (button.find("button="+input_down_btn+" s") != std::string::npos)
+                    {
+                        key_event.key.keysym.sym = MYKEY_DOWN;
+                        // std::cout << "You pressed down! " << '\n';
+                    }
+                    else if (button.find("hat=0 value=8") != std::string::npos)
+                    {
+                        key_event.key.keysym.sym = MYKEY_LEFT;
+                        // std::cout << "You pressed left! " << '\n';
+                    }
+                    else if (button.find("button="+input_left_btn+" s") != std::string::npos)
+                    {
+                        key_event.key.keysym.sym = MYKEY_LEFT;
+                        // std::cout << "You pressed left! " << '\n';
+                    }
+                    else if (button.find("hat=0 value=2") != std::string::npos)
+                    {
+                        key_event.key.keysym.sym = MYKEY_RIGHT;
+                        // std::cout << "You pressed right! " << '\n';
+                    }
+                    else if (button.find("button="+input_right_btn+" s") != std::string::npos)
+                    {
+                        key_event.key.keysym.sym = MYKEY_RIGHT;
+                        // std::cout << "You pressed right! " << '\n';
+                    }
+                    else if (button.find("button="+input_a_btn+" s") != std::string::npos)
+                    {
+                        key_event.key.keysym.sym = MYKEY_PARENT;
+                        // std::cout << "You pressed a! " << '\n';
+                    }
+                    else if (button.find("button="+input_b_btn+" s") != std::string::npos)
+                    {
+                        key_event.key.keysym.sym = MYKEY_OPEN;
+                        // std::cout << "You pressed b! " << '\n';
+                    }
+                    else if (button.find("button="+input_x_btn+" s") != std::string::npos)
+                    {
+                        key_event.key.keysym.sym = MYKEY_OPERATION;
+                        // std::cout << "You pressed x! " << '\n';
+                    }
+                    else if (button.find("button="+input_y_btn+" s") != std::string::npos)
+                    {
+                        key_event.key.keysym.sym = MYKEY_SYSTEM;
+                        // std::cout << "You pressed y! " << '\n';
+                    }
+                    else if (button.find("button="+input_l_btn+" s") != std::string::npos)
+                    {
+                        key_event.key.keysym.sym = MYKEY_PAGEUP;
+                        // std::cout << "You pressed l! " << '\n';
+                    }
+                    else if (button.find("button="+input_r_btn+" s") != std::string::npos)
+                    {
+                        key_event.key.keysym.sym = MYKEY_PAGEDOWN;
+                        // std::cout << "You pressed r! " << '\n';
+                    }
+                    else if (button.find("button="+input_select_btn+" s") != std::string::npos)
+                    {
+                        key_event.key.keysym.sym = MYKEY_SELECT;
+                        // std::cout << "You pressed select! " << '\n';
+                    }
+                    else if (button.find("button="+input_start_btn+" s") != std::string::npos)
+                    {
+                        key_event.key.keysym.sym = MYKEY_TRANSFER;
+                        // std::cout << "You pressed start! " << '\n';
+                    }
+                    else
+                    {
+                        break; // Breaks loop so undefined buttons do not trigger a key_event
+                        // SDL_utils::hastalavista(); // Quits file manager if an undefined button is pressed
+                        // std::cout << "I don't know what you pressed! " << '\n';
+                        // std::cout << button << '\n';
+                    }
+                    
+                    // Register the keypress
+                    if (button.find("hat=0 value=0") != std::string::npos)
+                    {
+                        // std::cout << "preventing a double input" << '\n';
+                    }
+                    else
+                    {
+                        l_render = this->keyPress(key_event);
+                        if (m_retVal)
+                            l_loop = false;
+                    }
+                }
+                break;
             }
-            else if (l_event.type == SDL_QUIT) 
-            {
-                return m_retVal;
-            }
-            else if(l_event.type == SDL_JOYBUTTONDOWN || l_event.type == SDL_JOYHATMOTION)
-            {
-               SDL_Event key_event;
- 
-     std::string button = sdlEventToString(l_event);
-         
-       if (button.find("hat=0 value=1") != std::string::npos) { 
-           key_event.key.keysym.sym = MYKEY_UP;
-//           std::cout << "You pressed up! " << '\n';
-       } else if (button.find("button="+input_up_btn+" s") != std::string::npos) { 
-           key_event.key.keysym.sym = MYKEY_UP;
-//           std::cout << "You pressed up! " << '\n';
-       } else if (button.find("hat=0 value=4") != std::string::npos) { 
-           key_event.key.keysym.sym = MYKEY_DOWN;
-//           std::cout << "You pressed down! " << '\n';
-       } else if (button.find("button="+input_down_btn+" s") != std::string::npos) { 
-           key_event.key.keysym.sym = MYKEY_DOWN;
-//           std::cout << "You pressed down! " << '\n';
-       } else if (button.find("hat=0 value=8") != std::string::npos) { 
-           key_event.key.keysym.sym = MYKEY_LEFT;
-//           std::cout << "You pressed left! " << '\n';
-       } else if (button.find("button="+input_left_btn+" s") != std::string::npos) { 
-           key_event.key.keysym.sym = MYKEY_LEFT;
-//           std::cout << "You pressed left! " << '\n';
-       } else if (button.find("hat=0 value=2") != std::string::npos) { 
-           key_event.key.keysym.sym = MYKEY_RIGHT;
-//           std::cout << "You pressed right! " << '\n';
-       } else if (button.find("button="+input_right_btn+" s") != std::string::npos) { 
-           key_event.key.keysym.sym = MYKEY_RIGHT;
-//           std::cout << "You pressed right! " << '\n';
-       } else if (button.find("button="+input_a_btn+" s") != std::string::npos) { 
-           key_event.key.keysym.sym = MYKEY_PARENT;
-//           std::cout << "You pressed a! " << '\n';
-       } else if (button.find("button="+input_b_btn+" s") != std::string::npos) { 
-           key_event.key.keysym.sym = MYKEY_OPEN;
-//           std::cout << "You pressed b! " << '\n';
-       } else if (button.find("button="+input_x_btn+" s") != std::string::npos) { 
-           key_event.key.keysym.sym = MYKEY_OPERATION;
-//           std::cout << "You pressed x! " << '\n';
-       } else if (button.find("button="+input_y_btn+" s") != std::string::npos) { 
-           key_event.key.keysym.sym = MYKEY_SYSTEM;
-//           std::cout << "You pressed y! " << '\n';
-       } else if (button.find("button="+input_l_btn+" s") != std::string::npos) { 
-           key_event.key.keysym.sym = MYKEY_PAGEUP;
-//           std::cout << "You pressed l! " << '\n';
-       }else if (button.find("button="+input_r_btn+" s") != std::string::npos) { 
-           key_event.key.keysym.sym = MYKEY_PAGEDOWN;
-//           std::cout << "You pressed r! " << '\n';
-       }else if (button.find("button="+input_select_btn+" s") != std::string::npos) { 
-           key_event.key.keysym.sym = MYKEY_SELECT;
-//           std::cout << "You pressed select! " << '\n';
-       }else if (button.find("button="+input_start_btn+" s") != std::string::npos) { 
-           key_event.key.keysym.sym = MYKEY_TRANSFER;
-//           std::cout << "You pressed start! " << '\n';
-       } else if (button.find("hat=0 value=0") != std::string::npos) { 
-         //std::cout << "preventing a double input" << '\n';
-         } //else { 
-//           std::cout << "I don't know what you pressed! " << '\n';
-//           std::cout << button << '\n';
-       // }
-         
-         if (button.find("hat=0 value=0") != std::string::npos) { 
-         //std::cout << "preventing a double input" << '\n';
-         } else {
-                l_render = this->keyPress(key_event);
-                if (m_retVal)
-                    l_loop = false;
         }
-           }
-        }
+        
         // Handle key hold
         if (l_loop)
             l_render = this->keyHold() || l_render;
