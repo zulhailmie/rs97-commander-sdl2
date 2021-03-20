@@ -30,20 +30,20 @@ CWindow::~CWindow(void)
 
 const int CWindow::execute(void)
 {
-std::string input_up_btn;
-std::string input_down_btn;
-std::string input_left_btn;
-std::string input_right_btn;
-std::string input_a_btn;
-std::string input_b_btn;
-std::string input_x_btn;
-std::string input_y_btn;
-std::string input_l_btn;
-std::string input_r_btn;
-std::string input_select_btn;
-std::string input_start_btn;
-std::string input_l3_btn;
-std::string gamepad = SDL_JoystickNameForIndex(0);
+    std::string input_up_btn;
+    std::string input_down_btn;
+    std::string input_left_btn;
+    std::string input_right_btn;
+    std::string input_a_btn;
+    std::string input_b_btn;
+    std::string input_x_btn;
+    std::string input_y_btn;
+    std::string input_l_btn;
+    std::string input_r_btn;
+    std::string input_select_btn;
+    std::string input_start_btn;
+    std::string input_l3_btn;
+    std::string gamepad = SDL_JoystickNameForIndex(0);
     
     //from: https://www.walletfox.com/course/parseconfigfile.php
     // std::ifstream is RAII, i.e. no need to call close
@@ -259,7 +259,6 @@ std::string gamepad = SDL_JoystickNameForIndex(0);
                     else
                     {
                         break; // Breaks loop so undefined buttons do not trigger a key_event
-                        // SDL_utils::hastalavista(); // Quits file manager if an undefined button is pressed
                         // std::cout << "I don't know what you pressed! " << '\n';
                         // std::cout << button << '\n';
                     }
