@@ -13,11 +13,11 @@
 #ifndef VIEWER_LINE_HEIGHT
 #define VIEWER_LINE_HEIGHT   13
 #endif
-#define VIEWER_Y_LIST        18
+#define VIEWER_Y_LIST        22         // (SCREENH/MAXLINES)+2
 #define VIEWER_NB_LINES      ((screen.h - VIEWER_Y_LIST - 1) / VIEWER_LINE_HEIGHT + 1)
 #define VIEWER_MARGIN        1
 #define VIEWER_X_STEP        32
-#define VIEWER_SIZE_MAX      16777216  // = 16 MB
+#define VIEWER_SIZE_MAX      16777216   // = 16 MB
 
 class CViewer : public CWindow
 {
