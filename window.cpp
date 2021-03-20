@@ -42,6 +42,7 @@ std::string input_l_btn;
 std::string input_r_btn;
 std::string input_select_btn;
 std::string input_start_btn;
+std::string input_l3_btn;
 std::string gamepad = SDL_JoystickNameForIndex(0);
     
     //from: https://www.walletfox.com/course/parseconfigfile.php
@@ -97,6 +98,9 @@ std::string gamepad = SDL_JoystickNameForIndex(0);
             
             if  (name.find("input_player1_start_btn") != std::string::npos) 
             input_start_btn = value;
+            
+            if  (name.find("input_l3_btn") != std::string::npos) 
+            input_l3_btn = value;
         }
     }
     else
@@ -138,47 +142,68 @@ std::string gamepad = SDL_JoystickNameForIndex(0);
                 }
                 break;
                     
-                case SDL_JOYBUTTONDOWN:
                 case SDL_JOYHATMOTION:
                 {
                     SDL_Event key_event;
-                    std::string button = sdlEventToString(l_event);
+                    std::string hat = sdlEventToString(l_event);
                     
-                    if (button.find("hat=0 value=1") != std::string::npos)
+                    if (hat.find("hat=0 value=1") != std::string::npos)
                     {
                         key_event.key.keysym.sym = MYKEY_UP;
                         // std::cout << "You pressed up! " << '\n';
                     }
-                    else if (button.find("button="+input_up_btn+" s") != std::string::npos)
-                    {
-                        key_event.key.keysym.sym = MYKEY_UP;
-                        // std::cout << "You pressed up! " << '\n';
-                    }
-                    else if (button.find("hat=0 value=4") != std::string::npos)
+                    else if (hat.find("hat=0 value=4") != std::string::npos)
                     {
                         key_event.key.keysym.sym = MYKEY_DOWN;
                         // std::cout << "You pressed down! " << '\n';
+                    }
+                    else if (hat.find("hat=0 value=8") != std::string::npos)
+                    {
+                        key_event.key.keysym.sym = MYKEY_LEFT;
+                        // std::cout << "You pressed left! " << '\n';
+                    }
+                    else if (hat.find("hat=0 value=2") != std::string::npos)
+                    {
+                        key_event.key.keysym.sym = MYKEY_RIGHT;
+                        // std::cout << "You pressed right! " << '\n';
+                    }
+                    else
+                    {
+                        break; // Breaks loop so undefined hats do not trigger a key_event
+                    }
+                    
+                    // Register the keypress
+                    if (!(hat.find("hat=0 value=0") != std::string::npos))
+                    {
+                        l_render = this->keyPress(key_event);
+                        if (m_retVal)
+                            l_loop = false;
+                    }
+                }
+                break;
+                    
+                case SDL_JOYBUTTONDOWN:
+                {
+                    SDL_Event key_event;
+                    std::string button = sdlEventToString(l_event);
+
+                    if (button.find("button="+input_up_btn+" s") != std::string::npos)
+                    {
+                        key_event.key.keysym.sym = MYKEY_UP;
+                        // std::cout << "You pressed up! " << '\n';
                     }
                     else if (button.find("button="+input_down_btn+" s") != std::string::npos)
                     {
                         key_event.key.keysym.sym = MYKEY_DOWN;
                         // std::cout << "You pressed down! " << '\n';
                     }
-                    else if (button.find("hat=0 value=8") != std::string::npos)
-                    {
-                        key_event.key.keysym.sym = MYKEY_LEFT;
-                        // std::cout << "You pressed left! " << '\n';
-                    }
+
                     else if (button.find("button="+input_left_btn+" s") != std::string::npos)
                     {
                         key_event.key.keysym.sym = MYKEY_LEFT;
                         // std::cout << "You pressed left! " << '\n';
                     }
-                    else if (button.find("hat=0 value=2") != std::string::npos)
-                    {
-                        key_event.key.keysym.sym = MYKEY_RIGHT;
-                        // std::cout << "You pressed right! " << '\n';
-                    }
+
                     else if (button.find("button="+input_right_btn+" s") != std::string::npos)
                     {
                         key_event.key.keysym.sym = MYKEY_RIGHT;
@@ -224,6 +249,13 @@ std::string gamepad = SDL_JoystickNameForIndex(0);
                         key_event.key.keysym.sym = MYKEY_TRANSFER;
                         // std::cout << "You pressed start! " << '\n';
                     }
+                    else if (button.find("button="+input_l3_btn+" s") != std::string::npos)
+                    {
+                        // Call the exit method twice in case it doesn't work correctly the first time
+                        SDL_utils::hastalavista();
+                        SDL_utils::hastalavista();
+                        // std::cout << "You pressed l3! Exiting... " << '\n';
+                    }
                     else
                     {
                         break; // Breaks loop so undefined buttons do not trigger a key_event
@@ -233,11 +265,7 @@ std::string gamepad = SDL_JoystickNameForIndex(0);
                     }
                     
                     // Register the keypress
-                    if (button.find("hat=0 value=0") != std::string::npos)
-                    {
-                        // std::cout << "preventing a double input" << '\n';
-                    }
-                    else
+                    if (!(button.find("hat=0 value=0") != std::string::npos))
                     {
                         l_render = this->keyPress(key_event);
                         if (m_retVal)
