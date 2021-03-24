@@ -11,13 +11,15 @@ ifeq ($(ODROIDGO), 1)
 	SCREENW := 480
 	SCREENH := 320
 	FONTSIZE := 8
-	HEADERH := 17
-	H_PADDING_TOP := 3
-	FOOTERH := 13
-	F_PADDING_TOP := 1
-	LINEH := 15
 	FONTTOUSE := $(RESDIR)/Fiery_Turk.ttf
-	VIEWER_LINE_H := 13
+	H_PADDING_TOP := 3
+	F_PADDING_TOP := 3
+	MAXLINES := 20
+	LINESPACE := $(shell echo $$(($(SCREENH)/$(MAXLINES))))
+	HEADERH := $(LINESPACE)
+	FOOTERH := $(LINESPACE)
+	LINEH := $(LINESPACE)
+	VIEWER_LINE_H := $(LINESPACE)
 else
 # todo detect resolution and set window to corrext size
 	SCREENW ?= 1920
