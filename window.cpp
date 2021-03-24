@@ -183,13 +183,16 @@ std::string input_start_btn;
            key_event.key.keysym.sym = MYKEY_TRANSFER;
 //           std::cout << "You pressed start! " << '\n';
        } else if (button.find("hat=0 value=0") != std::string::npos) { 
+           break;
          //std::cout << "preventing a double input" << '\n';
-         } //else { 
+         } else { 
+           break;
 //           std::cout << "I don't know what you pressed! " << '\n';
 //           std::cout << button << '\n';
-       // }
+         }
          
          if (button.find("hat=0 value=0") != std::string::npos) { 
+             break;
          //std::cout << "preventing a double input" << '\n';
          } else {
                 l_render = this->keyPress(key_event);
